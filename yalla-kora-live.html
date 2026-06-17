@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>يلا كورة لايف - مباريات كأس العالم 2026</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #0d0d0d;
+      color: #f0f0f0;
+      font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+      direction: rtl;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid #e94560;
+    }
+
+    .site-logo {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: #e94560;
+      letter-spacing: 1px;
+    }
+
+    .site-tagline {
+      font-size: 0.85rem;
+      color: #aaa;
+      margin-top: 2px;
+    }
+
+    nav {
+      display: flex;
+      gap: 20px;
+    }
+
+    nav a {
+      color: #ccc;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+
+    nav a:hover {
+      color: #e94560;
+    }
+
+    .hero-banner {
+      background: linear-gradient(180deg, #0f3460 0%, #0d0d0d 100%);
+      text-align: center;
+      padding: 40px 20px 30px;
+    }
+
+    .hero-banner h1 {
+      font-size: 2rem;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .hero-banner h1 span {
+      color: #e94560;
+    }
+
+    .hero-banner p {
+      color: #aaa;
+      font-size: 0.95rem;
+    }
+
+    .main-content {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+      border-right: 4px solid #e94560;
+      padding-right: 12px;
+      margin-bottom: 20px;
+    }
+
+    .results-section {
+      background: #141414;
+      border-radius: 10px;
+      padding: 24px;
+      border: 1px solid #222;
+    }
+
+    .widget-wrapper {
+      width: 100%;
+      min-height: 400px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #555;
+      font-size: 0.8rem;
+      border-top: 1px solid #1a1a1a;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div>
+      <div class="site-logo">يلا كورة لايف</div>
+      <div class="site-tagline">مباريات مباشرة - نتائج - جداول</div>
+    </div>
+    <nav>
+      <a href="#">الرئيسية</a>
+      <a href="#">المباريات</a>
+      <a href="#">النتائج</a>
+      <a href="#">الجداول</a>
+    </nav>
+  </header>
+
+  <div class="hero-banner">
+    <h1>كأس العالم <span>2026</span></h1>
+    <p>تابع جميع مباريات كأس العالم مباشرة وفي الوقت الفعلي</p>
+  </div>
+
+  <div class="main-content">
+    <section class="results-section" id="results">
+      <h2 class="section-title">نتائج ومباريات كأس العالم 2026</h2>
+      <div class="widget-wrapper">
+        <script type="module"
+          src="https://widgets.api-sports.io/2.0.3/widgets.js"
+          data-host="v3.football.api-sports.io"
+          data-key="bd7064a9ee01c59bee8bbc74fd729e59"
+          data-sport="football"
+          data-league="1"
+          data-season="2026"
+          data-widget="games"
+          data-theme="dark"
+          data-lang="en">
+        </script>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <p>يلا كورة لايف &copy; 2026 - جميع الحقوق محفوظة</p>
+  </footer>
+
+</body>
+</html>
