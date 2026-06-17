@@ -140,7 +140,6 @@
         <div id="wg-api-football-games"
           data-host="v3.football.api-sports.io"
           data-key="cf8fc079c0de5daec75f9f652fd6e540"
-          data-date="2026-06-17"
           data-league="1"
           data-season="2026"
           data-theme="dark"
@@ -148,6 +147,11 @@
         </div>
         <script src="https://widgets.api-sports.io/2.0.3/widgets.js" type="module"></script>
       </div>
+      <script>
+        // Set today's date dynamically on the widget div
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('wg-api-football-games').setAttribute('data-date', today);
+      </script>
     </section>
   </div>
 
