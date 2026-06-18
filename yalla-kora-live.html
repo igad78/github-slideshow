@@ -137,21 +137,22 @@
     <section class="results-section" id="results">
       <h2 class="section-title">نتائج ومباريات كأس العالم 2026</h2>
       <div class="widget-wrapper">
-        <div id="wg-api-football-games"
-          data-host="v3.football.api-sports.io"
-          data-key="cf8fc079c0de5daec75f9f652fd6e540"
-          data-league="1"
-          data-season="2026"
+        <api-sports-widget data-type="leagues"
+          data-target-league="league 1">
+        </api-sports-widget>
+
+        <api-sports-widget data-type="config"
+          data-key="60b1062cf3a1814fa45b70eb155a3316"
+          data-sport="football"
+          data-lang="en"
           data-theme="dark"
-          data-refresh="15">
-        </div>
+          data-timezone="Asia/Doha"
+          data-show-errors="true"
+          data-show-logos="true">
+        </api-sports-widget>
+
         <script src="https://widgets.api-sports.io/2.0.3/widgets.js" type="module"></script>
       </div>
-      <script>
-        // Set today's date dynamically on the widget div
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('wg-api-football-games').setAttribute('data-date', today);
-      </script>
     </section>
   </div>
 
