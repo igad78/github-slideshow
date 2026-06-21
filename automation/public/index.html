@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Automation Engine Dashboard</title>
+  <style>
+    /* ── Reset & base ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #0d0d0d;
+      --surface:    #141414;
+      --surface2:   #1a1a2e;
+      --border:     #2a2a3e;
+      --accent:     #e94560;
+      --accent2:    #0f3460;
+      --text:       #e8e8e8;
+      --text-muted: #888;
+      --green:      #00d084;
+      --red:        #e94560;
+      --font:       'Segoe UI', Tahoma, Arial, sans-serif;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+
+    /* ── Layout ─────────────────────────────────────────────── */
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── Header ─────────────────────────────────────────────── */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 56px;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      border-bottom: 2px solid var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 100;
+    }
+
+    .header-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.5px;
+    }
+
+    .header-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* ── Sidebar ─────────────────────────────────────────────── */
+    .sidebar {
+      width: 230px;
+      flex-shrink: 0;
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      padding-top: 72px;
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      overflow-y: auto;
+    }
+
+    .sidebar-section {
+      padding: 16px 16px 8px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .integration-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+
+    .integration-item:hover { background: var(--surface2); }
+
+    .integration-label {
+      flex: 1;
+    }
+
+    .integration-label .en { font-size: 13px; font-weight: 600; }
+    .integration-label .ar { font-size: 11px; color: var(--text-muted); }
+
+    /* ── Status dots ─────────────────────────────────────────── */
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      cursor: default;
+    }
+
+    .dot-green { background: var(--green); box-shadow: 0 0 6px var(--green); }
+    .dot-red   { background: var(--red);   box-shadow: 0 0 6px var(--red);   }
+    .dot-grey  { background: #555; }
+
+    /* ── Main content ─────────────────────────────────────────── */
+    .main {
+      flex: 1;
+      margin-right: 230px;
+      padding: 72px 24px 40px;
+    }
+
+    /* ── Cards ────────────────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    .card-title-ar {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    /* ── Stats row ────────────────────────────────────────────── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .stat-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 14px 16px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--accent);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stat-label { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+    /* ── Event log table ──────────────────────────────────────── */
+    .table-wrap { overflow-x: auto; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    thead th {
+      background: var(--surface2);
+      border-bottom: 2px solid var(--border);
+      padding: 10px 12px;
+      text-align: right;
+      font-weight: 600;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    tbody tr { border-bottom: 1px solid var(--border); transition: background 0.12s; }
+    tbody tr:hover { background: var(--surface2); }
+    tbody td { padding: 10px 12px; vertical-align: middle; }
+
+    .empty-row { text-align: center; color: var(--text-muted); padding: 24px !important; }
+    .mono { font-family: monospace; font-size: 12px; color: var(--text-muted); }
+
+    /* ── Badges ───────────────────────────────────────────────── */
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .badge-ok    { background: rgba(0, 208, 132, 0.15); color: var(--green); border: 1px solid var(--green); }
+    .badge-error { background: rgba(233, 69,  96, 0.15); color: var(--red);   border: 1px solid var(--red);   }
+
+    /* ── Sports pipeline ──────────────────────────────────────── */
+    .sports-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .sports-field {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px;
+    }
+
+    .sports-field-label { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
+    .sports-field-value { font-size: 14px; font-weight: 600; color: var(--text); word-break: break-word; }
+
+    .sports-status-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .sports-idle    { background: rgba(100,100,100,0.2); color: #aaa;          border: 1px solid #555; }
+    .sports-running { background: rgba(255,165,0,0.2);   color: #ffaa33;       border: 1px solid #ffaa33; }
+    .sports-error   { background: rgba(233,69,96,0.15);  color: var(--red);    border: 1px solid var(--red); }
+    .sports-ok      { background: rgba(0,208,132,0.15);  color: var(--green);  border: 1px solid var(--green); }
+
+    /* ── Buttons ──────────────────────────────────────────────── */
+    .btn-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 18px;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+    .btn:not(:disabled):hover { opacity: 0.88; transform: translateY(-1px); }
+    .btn:not(:disabled):active { transform: translateY(0); }
+
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-secondary {
+      background: transparent;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+
+    /* ── Run result ───────────────────────────────────────────── */
+    .run-result {
+      font-size: 13px;
+      padding: 8px 12px;
+      border-radius: 4px;
+      margin-top: 4px;
+      min-height: 32px;
+    }
+
+    .result-ok    { background: rgba(0,208,132,0.1); color: var(--green); border: 1px solid var(--green); }
+    .result-error { background: rgba(233,69,96,0.1); color: var(--red);   border: 1px solid var(--red);   }
+
+    /* ── Scrollbar ────────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3a3a5e; }
+  </style>
+</head>
+<body>
+
+<!-- ── Header ─────────────────────────────────────────────────── -->
+<header>
+  <div>
+    <div class="header-title">⚙ Automation Engine Dashboard</div>
+    <div class="header-sub">لوحة تحكم محرك الأتمتة</div>
+  </div>
+  <div class="header-right">
+    <span>Uptime / وقت التشغيل: <strong id="uptime" style="color:var(--text);font-variant-numeric:tabular-nums">00:00:00</strong></span>
+    <span id="connection-dot" class="status-dot dot-grey" title="Connecting…"></span>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- ── Sidebar ──────────────────────────────────────────────── -->
+  <aside class="sidebar">
+    <div class="sidebar-section">APIs / التكاملات</div>
+
+    <!-- HubSpot -->
+    <div class="integration-item">
+      <span id="dot-hubspot" class="status-dot dot-grey" title="—"></span>
+      <div class="integration-label">
+        <div class="en">HubSpot</div>
+        <div class="ar">هاب سبوت</div>
+      </div>
+    </div>
+
+    <!-- Stripe -->
+    <div class="integration-item">
+      <span id="dot-stripe" class="status-dot dot-grey" title="—"></span>
+      <div class="integration-label">
+        <div class="en">Stripe</div>
+        <div class="ar">سترايب</div>
+      </div>
+    </div>
+
+    <!-- Slack -->
+    <div class="integration-item">
+      <span id="dot-slack" class="status-dot dot-grey" title="—"></span>
+      <div class="integration-label">
+        <div class="en">Slack</div>
+        <div class="ar">سلاك</div>
+      </div>
+    </div>
+
+    <!-- Notion -->
+    <div class="integration-item">
+      <span id="dot-notion" class="status-dot dot-grey" title="—"></span>
+      <div class="integration-label">
+        <div class="en">Notion</div>
+        <div class="ar">نوشن</div>
+      </div>
+    </div>
+
+    <!-- Airtable -->
+    <div class="integration-item">
+      <span id="dot-airtable" class="status-dot dot-grey" title="—"></span>
+      <div class="integration-label">
+        <div class="en">Airtable</div>
+        <div class="ar">إيرتيبل</div>
+      </div>
+    </div>
+
+    <!-- Gmail -->
+    <div class="integration-item">
+      <span id="dot-gmail" class="status-dot dot-grey" title="—"></span>
+      <div class="integration-label">
+        <div class="en">Gmail</div>
+        <div class="ar">جيميل</div>
+      </div>
+    </div>
+
+    <!-- Shopify -->
+    <div class="integration-item">
+      <span id="dot-shopify" class="status-dot dot-grey" title="—"></span>
+      <div class="integration-label">
+        <div class="en">Shopify</div>
+        <div class="ar">شوبيفاي</div>
+      </div>
+    </div>
+
+    <!-- Sports Pipeline -->
+    <div class="integration-item">
+      <span id="dot-sportsPipeline" class="status-dot dot-grey" title="—"></span>
+      <div class="integration-label">
+        <div class="en">Sports Pipeline</div>
+        <div class="ar">خط أنابيب الرياضة</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── Main ─────────────────────────────────────────────────── -->
+  <main class="main">
+
+    <!-- Stats row -->
+    <div class="stats-row">
+      <div class="stat-box">
+        <div class="stat-value" id="sports-matches">0</div>
+        <div class="stat-label">Matches Processed / مباريات معالجة</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value" id="sports-videos">0</div>
+        <div class="stat-label">Videos Published / فيديوهات منشورة</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value" id="event-count">0</div>
+        <div class="stat-label">Events Logged / أحداث مسجلة</div>
+      </div>
+    </div>
+
+    <!-- ── Sports Pipeline card ─────────────────────────────── -->
+    <div class="card">
+      <div class="card-title">Sports Pipeline / خط أنابيب الرياضة</div>
+      <div class="card-title-ar">آخر تشغيل ونتائج البث المباشر</div>
+
+      <div class="sports-grid">
+        <div class="sports-field">
+          <div class="sports-field-label">Status / الحالة</div>
+          <div class="sports-field-value">
+            <span id="sports-status" class="sports-status-badge sports-idle">idle</span>
+          </div>
+        </div>
+        <div class="sports-field">
+          <div class="sports-field-label">Last Run / آخر تشغيل</div>
+          <div class="sports-field-value" id="sports-last-run">—</div>
+        </div>
+        <div class="sports-field">
+          <div class="sports-field-label">Last Match / آخر مباراة</div>
+          <div class="sports-field-value" id="sports-last-match">—</div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button id="btn-run-sports" class="btn btn-primary">
+          ▶ شغّل خط أنابيب الرياضة / Run Sports Pipeline Now
+        </button>
+        <button id="btn-test-webhook" class="btn btn-secondary">
+          🔔 اختبار Webhook / Test Webhook
+        </button>
+      </div>
+
+      <div id="sports-run-result" class="run-result"></div>
+      <div id="webhook-result" class="run-result" style="margin-top:6px"></div>
+    </div>
+
+    <!-- ── Event Log card ───────────────────────────────────── -->
+    <div class="card">
+      <div class="card-title">Event Log / سجل الأحداث</div>
+      <div class="card-title-ar">آخر 10 أحداث معالجة — يتحدث كل 5 ثوان</div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Time / الوقت</th>
+              <th>Event Type / نوع الحدث</th>
+              <th>Platforms / المنصات</th>
+              <th>Status / الحالة</th>
+            </tr>
+          </thead>
+          <tbody id="event-tbody">
+            <tr><td colspan="4" class="empty-row">جاري التحميل… / Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="dashboard.js"></script>
+<script>
+  // Keep event-count stat in sync with the table row count
+  const observer = new MutationObserver(() => {
+    const rows = document.querySelectorAll('#event-tbody tr:not(.empty-row)');
+    const el = document.getElementById('event-count');
+    if (el) el.textContent = rows.length;
+  });
+  observer.observe(document.getElementById('event-tbody'), { childList: true });
+</script>
+</body>
+</html>

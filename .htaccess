@@ -1,0 +1,52 @@
+# -----------------------------------------------
+# Content Security Policy — allow API-Sports widget
+# -----------------------------------------------
+<IfModule mod_headers.c>
+    Header always set Content-Security-Policy "\
+        default-src 'self'; \
+        script-src 'self' 'unsafe-inline' 'unsafe-eval' \
+            https://widgets.api-sports.io \
+            https://v3.football.api-sports.io; \
+        style-src 'self' 'unsafe-inline' \
+            https://widgets.api-sports.io; \
+        img-src 'self' data: blob: \
+            https://widgets.api-sports.io \
+            https://media.api-sports.io \
+            https://media-3.api-sports.io; \
+        connect-src 'self' \
+            https://v3.football.api-sports.io \
+            https://widgets.api-sports.io; \
+        font-src 'self' data: \
+            https://widgets.api-sports.io; \
+        frame-src 'self' \
+            https://widgets.api-sports.io;"
+
+    # Allow cross-origin requests for the widget
+    Header always set Access-Control-Allow-Origin "*"
+    Header always set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+    Header always set Access-Control-Allow-Headers "Content-Type, x-apisports-key"
+
+    # Remove X-Frame-Options restriction so widget iframes can load
+    Header always unset X-Frame-Options
+</IfModule>
+
+# -----------------------------------------------
+# Fix 403 errors — allow direct file access
+# -----------------------------------------------
+Options -Indexes
+Options +FollowSymLinks
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Allow OPTIONS preflight requests (CORS)
+    RewriteCond %{REQUEST_METHOD} OPTIONS
+    RewriteRule .* - [R=200,L]
+</IfModule>
+
+# -----------------------------------------------
+# MIME types for module scripts
+# -----------------------------------------------
+<IfModule mod_mime.c>
+    AddType application/javascript .js .mjs
+</IfModule>
