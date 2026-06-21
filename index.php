@@ -55,63 +55,6 @@ header("Access-Control-Allow-Headers: Content-Type, x-apisports-key");
       padding: 24px 16px 48px;
     }
 
-    .api-key-form {
-      background: #1a1a1a;
-      border: 1px solid #333;
-      border-radius: 10px;
-      padding: 20px 24px;
-      margin-bottom: 24px;
-    }
-
-    .api-key-form h3 {
-      font-size: 1rem;
-      color: #aaa;
-      margin-bottom: 12px;
-      border-right: 3px solid #e94560;
-      padding-right: 10px;
-    }
-
-    .api-key-form .form-row {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .api-key-form input[type="text"] {
-      flex: 1;
-      min-width: 200px;
-      padding: 10px 14px;
-      background: #0d0d0d;
-      border: 1px solid #444;
-      border-radius: 6px;
-      color: #fff;
-      font-size: 0.9rem;
-      direction: ltr;
-    }
-
-    .api-key-form input[type="date"] {
-      padding: 10px 14px;
-      background: #0d0d0d;
-      border: 1px solid #444;
-      border-radius: 6px;
-      color: #fff;
-      font-size: 0.9rem;
-    }
-
-    .api-key-form button {
-      padding: 10px 22px;
-      background: #e94560;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      font-size: 0.9rem;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-
-    .api-key-form button:hover { background: #c73652; }
-
     .section-title {
       font-size: 1.2rem;
       font-weight: 700;
@@ -129,6 +72,13 @@ header("Access-Control-Allow-Headers: Content-Type, x-apisports-key");
     }
 
     .widget-wrapper { width: 100%; min-height: 400px; }
+
+    #loading-msg {
+      color: #555;
+      text-align: center;
+      padding: 60px 0;
+      font-size: 0.95rem;
+    }
 
     footer {
       text-align: center;
@@ -161,23 +111,10 @@ header("Access-Control-Allow-Headers: Content-Type, x-apisports-key");
 
 <div class="main-content">
 
-  <!-- API Key & Date Controls -->
-  <div class="api-key-form">
-    <h3>إعدادات الـ Widget</h3>
-    <div class="form-row">
-      <input type="text" id="apiKeyInput" value="<?php echo htmlspecialchars($api_key); ?>" direction="ltr">
-      <input type="date" id="dateInput">
-      <button onclick="loadWidget()">تحميل المباريات</button>
-    </div>
-  </div>
-
-  <!-- Results Section -->
   <section class="results-section" id="results">
     <h2 class="section-title">نتائج ومباريات كأس العالم 2026</h2>
     <div class="widget-wrapper" id="widget-container">
-      <p style="color:#555; text-align:center; padding:60px 0;">
-        أدخل الـ API Key أعلاه ثم اضغط "تحميل المباريات"
-      </p>
+      <p id="loading-msg">جاري تحميل المباريات...</p>
     </div>
   </section>
 
@@ -187,55 +124,42 @@ header("Access-Control-Allow-Headers: Content-Type, x-apisports-key");
   <p>يلا كورة لايف &copy; 2026 - جميع الحقوق محفوظة</p>
 </footer>
 
+<!-- Key injected server-side; not in any visible or editable element -->
 <script>
-  // Set today's date as default and auto-load widget on page open
-  const today = new Date().toISOString().split('T')[0];
-  document.getElementById('dateInput').value = today;
-  window.addEventListener('DOMContentLoaded', loadWidget);
+  const _wk = '<?php echo $api_key; ?>';
+  const _wd = new Date().toISOString().split('T')[0];
 
-  function loadWidget() {
-    const key  = document.getElementById('apiKeyInput').value.trim();
-    const date = document.getElementById('dateInput').value;
-
-    if (!key) {
-      alert('الرجاء إدخال API Key أولاً');
-      return;
-    }
-
+  document.addEventListener('DOMContentLoaded', function () {
     const container = document.getElementById('widget-container');
-
-    // Remove old widget + script to force fresh load
-    container.innerHTML = '';
+    document.getElementById('loading-msg').remove();
 
     const div = document.createElement('div');
     div.id = 'wg-api-football-games';
     div.setAttribute('data-host',    'v3.football.api-sports.io');
-    div.setAttribute('data-key',     key);
-    div.setAttribute('data-date',    date);
+    div.setAttribute('data-key',     _wk);
+    div.setAttribute('data-date',    _wd);
     div.setAttribute('data-league',  '1');
     div.setAttribute('data-season',  '2026');
     div.setAttribute('data-theme',   'dark');
     div.setAttribute('data-refresh', '15');
     container.appendChild(div);
 
-    // Also inject config widget
     const config = document.createElement('api-sports-widget');
-    config.setAttribute('data-type',       'config');
-    config.setAttribute('data-key',        key);
-    config.setAttribute('data-sport',      'football');
-    config.setAttribute('data-lang',       'en');
-    config.setAttribute('data-theme',      'dark');
-    config.setAttribute('data-timezone',   'Asia/Doha');
-    config.setAttribute('data-show-errors','true');
-    config.setAttribute('data-show-logos', 'true');
+    config.setAttribute('data-type',        'config');
+    config.setAttribute('data-key',         _wk);
+    config.setAttribute('data-sport',       'football');
+    config.setAttribute('data-lang',        'en');
+    config.setAttribute('data-theme',       'dark');
+    config.setAttribute('data-timezone',    'Asia/Doha');
+    config.setAttribute('data-show-errors', 'true');
+    config.setAttribute('data-show-logos',  'true');
     container.appendChild(config);
 
-    // Load widget script fresh
     const script = document.createElement('script');
     script.src  = 'https://widgets.api-sports.io/2.0.3/widgets.js';
     script.type = 'module';
     container.appendChild(script);
-  }
+  });
 </script>
 
 </body>
