@@ -1,7 +1,11 @@
 timezone:    Europe/Berlin
 future:      false
 # Set baseurl to the base path of the site eg "/mytalk"
-# baseurl:     "/github-slideshow"
+# Required for GitHub Pages project sites, which are served from
+# https://<user>.github.io/<repo>/ — without it every asset URL below points at
+# the domain root and 404s, so reveal.js never loads and the page renders blank.
+# Set to "" if you serve this from a user/org site or a custom domain root.
+baseurl:     "/github-slideshow"
 # The allowed values are 'rouge', 'pygments' or null.
 highlighter: rouge
 # markdown - Valid options are [ maruku | rdiscount | kramdown | redcarpet ]
@@ -101,16 +105,24 @@ reveal:
   minScale: 0.2
   maxScale: 1.5
 
+# Jekyll appends its own DEFAULT_EXCLUDES (which contains "node_modules") to
+# whatever `exclude` lists below, so reveal.js is dropped from _site unless it
+# is named here. Without this the deck renders as unstyled HTML with no JS.
+include: [
+  "node_modules"
+]
+
 exclude: [
   "Gemfile",
   "Gemfile.lock",
   "vendor",
-  "reveal.js/test",
-  "reveal.js/index.html",
-  "reveal.js/README.md",
-  "reveal.js/bower.json",
-  "reveal.js/Gruntfile.js",
-  "reveal.js/CONTRIBUTING.md",
-  "reveal.js/LICENSE",
-  "reveal.js/package.json"
+  "node_modules/reveal.js/test",
+  "node_modules/reveal.js/index.html",
+  "node_modules/reveal.js/demo.html",
+  "node_modules/reveal.js/README.md",
+  "node_modules/reveal.js/bower.json",
+  "node_modules/reveal.js/gruntfile.js",
+  "node_modules/reveal.js/CONTRIBUTING.md",
+  "node_modules/reveal.js/LICENSE",
+  "node_modules/reveal.js/package.json"
 ]
