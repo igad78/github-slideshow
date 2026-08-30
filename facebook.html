@@ -1,0 +1,113 @@
+---
+layout: null
+permalink: /facebook/
+title: Botaty on Facebook
+description: Follow Botaty on Facebook or start a chat on Messenger.
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ page.title }}</title>
+<meta name="description" content="{{ page.description }}">
+<link rel="canonical" href="https://botaty.net/facebook/">
+<meta property="og:title" content="{{ page.title }}">
+<meta property="og:description" content="{{ page.description }}">
+<meta property="og:type" content="website">
+<style>
+  :root {
+    --bg: #171717;
+    --card: #212121;
+    --text: #f5f5f5;
+    --muted: #b0b3b8;
+    --brand: #0a7cff;
+    --brand-hover: #2b8fff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 2.5rem 1.25rem;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+  }
+  main {
+    width: 100%;
+    max-width: 24rem;
+    background: var(--card);
+    border-radius: 1.25rem;
+    padding: 2rem 1.5rem 1.75rem;
+    text-align: center;
+  }
+  h1 {
+    margin: 0 0 1.5rem;
+    font-size: 1.75rem;
+    letter-spacing: -0.01em;
+  }
+  /* The source image is a full phone screenshot; the frame below shows only
+     the QR code region of it, so no separate cropped asset is needed. */
+  .fb-link__qr {
+    position: relative;
+    width: 100%;
+    padding-top: 101%;
+    overflow: hidden;
+    border-radius: 0.75rem;
+    background: #1c1c1c;
+  }
+  .fb-link__qr img {
+    position: absolute;
+    top: -113.1%;
+    left: -39.5%;
+    width: 177.8%;
+    max-width: none;
+  }
+  .fb-link__handle {
+    margin: 1.25rem 0 0.25rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+  .fb-link__hint {
+    margin: 0 0 1.5rem;
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+  .fb-link__actions {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+  .fb-link__button {
+    display: block;
+    padding: 0.875rem 1rem;
+    border-radius: 999px;
+    background: #3a3b3c;
+    color: var(--text);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .fb-link__button:hover,
+  .fb-link__button:focus-visible { background: #4a4b4c; }
+  .fb-link__button--primary { background: var(--brand); }
+  .fb-link__button--primary:hover,
+  .fb-link__button--primary:focus-visible { background: var(--brand-hover); }
+  .fb-link__footer {
+    margin: 1.5rem 0 0;
+    color: var(--muted);
+    font-size: 0.8125rem;
+  }
+  .fb-link__footer a { color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Botaty</h1>
+  {% include facebook-link.html %}
+  <p class="fb-link__footer">Also reachable at <a href="https://botaty.net/facebook/">botaty.net/facebook</a></p>
+</main>
+</body>
+</html>

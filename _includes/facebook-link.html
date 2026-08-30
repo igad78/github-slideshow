@@ -1,0 +1,20 @@
+{% comment %}
+Botaty Facebook / Messenger link block.
+
+Host-agnostic on purpose: every link below is absolute to facebook.com /
+m.me, and the QR image is referenced through site.baseurl, so this include
+renders identically on botaty.net and on any of its sub domains.
+
+Usage:  {% include facebook-link.html %}
+{% endcomment %}
+<div class="fb-link">
+  <div class="fb-link__qr" aria-hidden="true">
+    <img src="{{ site.baseurl }}/assets/img/botaty-messenger-qr.jpg" alt="">
+  </div>
+  <p class="fb-link__handle">@botaty.2023</p>
+  <p class="fb-link__hint">Scan the code with your phone camera, or use a link below.</p>
+  <ul class="fb-link__actions">
+    <li><a class="fb-link__button fb-link__button--primary" href="https://www.facebook.com/botaty.2023" rel="me noopener" target="_blank">Botaty on Facebook</a></li>
+    <li><a class="fb-link__button" href="https://m.me/botaty.2023" rel="noopener" target="_blank">Message us on Messenger</a></li>
+  </ul>
+</div>
